@@ -2,13 +2,14 @@
 I define an API of a rope iterator.
 
 It is highly recommended to use iterator to enumerate ropes, since it can be done in constant time.
-I support forward and reverse directions of enumeration
+I support forward and reverse directions of enumeration.
+
+- start <Number>
+- end <Number>
 "
 Class {
 	#name : #BlRopeIterator,
 	#superclass : #Object,
-	#traits : 'TBlDebug',
-	#classTraits : 'TBlDebug classTrait',
 	#instVars : [
 		'rope',
 		'start',
@@ -193,9 +194,9 @@ BlRopeIterator >> nextSpan [
 BlRopeIterator >> nextSpan: aBlock [
 	"Evaluate aBlock with each attribute from each span and return a span for which aBlock returns either true or false.
 	The key here is that we can redefine what homogeneity of the span mean"
-	| initialValue aStart anEnd |
 	<return: #BlRope>
-
+		
+	| initialValue aStart anEnd |
 	self hasNext
 		ifFalse: [ self errorReachedTheEnd ].
 

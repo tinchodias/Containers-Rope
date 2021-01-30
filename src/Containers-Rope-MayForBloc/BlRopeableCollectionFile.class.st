@@ -1,6 +1,4 @@
 "
-Definition of Ropeable from wordnik.com (from Australia, New Zealand) Angry to the point of needing to be restrained from violent action.
-
 BlRopableCollectionFile looks enough like the Strings used by BlCollectionRope after the string has been normalised to be used in BlCollectionRope. 
 
 Since the entire file is not read until needed the size is an estimation which is guaranteed to be larger than or equal to the text size (since there are currently no cases in which a single byte from the file is converted to multiple characters / symbols in the resulting text).
@@ -58,7 +56,7 @@ Class {
 		'bufferedSize',
 		'haveSize'
 	],
-	#category : #'Containers-Rope'
+	#category : #'Containers-Rope-MayForBloc'
 }
 
 { #category : #accessing }

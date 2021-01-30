@@ -14,8 +14,6 @@ https://en.wikipedia.org/wiki/Rope_(data_structure)
 Class {
 	#name : #BlRope,
 	#superclass : #Object,
-	#traits : 'TBlDebug',
-	#classTraits : 'TBlDebug classTrait',
 	#category : #'Containers-Rope'
 }
 
@@ -158,7 +156,7 @@ BlRope >> attributes: anAttributesCollection from: aStart to: anEnd [
 	^ ^ ^ ^ ^ ^
 	0 1 2 3 4 5
 
-	In order to set attributes on the whole rope we should apply them from 0 (index before the first item) to 5 (index after the last item).
+	To set attributes on the whole rope we should apply them from 0 (index before the first item) to 5 (index after the last item).
 	To only apply attributes on the letter E we should set them from 1 to 2"
 
 	^ self subclassResponsibility

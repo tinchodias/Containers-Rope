@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'binaryStream'
 	],
-	#category : #'Containers-Rope'
+	#category : #'Containers-Rope-MayForBloc'
 }
 
 { #category : #accessing }
