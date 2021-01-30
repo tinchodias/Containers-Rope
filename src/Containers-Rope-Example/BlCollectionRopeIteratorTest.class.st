@@ -1,6 +1,12 @@
 "
 I have been automatically converted and probably manually tweaked from BlCollectionRopeIteratorExamples. Pay attention there is an important design decision in such tests. First to let GT people execute them, the tests and helpers are tagged with <gtExample> do not remove them, let also the <label:...>.
 	Finally and more important such tests should not use setup because every method should be in capacity of returning a fully working object called an example :)
+	
+Watch the tests in this classes are chained (for no immediate benefit).	
+- this way if certain methods fail most of the tests fail for no added value. 
+- in addition in term of cost all the intermediary steps are retested for nothing (because the assertions are reexecuted while they already got executed and validated in the previous test).
+
+Strange design isn't.  
 "
 Class {
 	#name : #BlCollectionRopeIteratorTest,
@@ -46,7 +52,7 @@ BlCollectionRopeIteratorTest >> testSmallNextAt0 [
 	<gtExample>
 	| anIterator anItem |
 	anIterator := self small.
-
+	
 	anItem := anIterator next.
 
 	self assert: anItem equals: $H.
@@ -150,7 +156,7 @@ BlCollectionRopeIteratorTest >> testSmallNextSpanAt0 [
 	| anIterator aSpan |
 	anIterator := self small.
 	aSpan := anIterator nextSpan.
-
+	
 	self assert: aSpan collection equals: 'Hello'.
 	self assert: anIterator position equals: 5.
 
@@ -341,14 +347,12 @@ BlCollectionRopeIteratorTest >> testSmallPreviousAt0 [
 	<label: 'Iterator throws an error when the start is reached'>
 	| anIterator anError |
 	anIterator := self small.
-
 	anError := nil.
 	[ anIterator previous ]
 		on: Error
 		do: [ :e | anError := e ].
 
 	self assert: anError isNotNil.
-
 	^ anIterator
 ]
 
