@@ -199,7 +199,7 @@ BlAttributeRope >> do: aBlock [
 	self rope do: aBlock
 ]
 
-{ #category : #'rope - accessing' }
+{ #category : #'text - converting' }
 BlAttributeRope >> empty [
 	"Create and return an empty version of this rope"
 	<return: #BlRope>
@@ -289,7 +289,7 @@ BlAttributeRope >> simplified [
 
 	^ self class attributeRope
 		attributes: attributes
-		rope: (rope simplified)
+		rope: rope simplified
 ]
 
 { #category : #'rope - accessing' }

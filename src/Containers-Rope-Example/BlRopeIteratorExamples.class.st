@@ -27,10 +27,10 @@ BlRopeIteratorExamples >> nextSpanFontColorOnAWithColor [
 	<gtExample>
 	| aRope anIterator aSpan |
 
-	aRope := (BlCollectionRope collection: 'A') attributes: { BlTextForegroundAttribute paint: Color red }.
+	aRope := (BlCollectionRope collection: 'A') attributes: { BlTextForegroundAttributeMock paint: Color red }.
 
 	anIterator := aRope iterator.
-	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttribute ].
+	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttributeMock ].
 	
 	self assert: aSpan == aRope.
 	self assert: anIterator hasNext not.
@@ -44,22 +44,22 @@ BlRopeIteratorExamples >> nextSpanFontColorOnHelloWorldWithColor [
 	| aRope anIterator aSpan |
 
 	aRope := (BlCollectionRope collection: 'Hello World').
-	aRope := aRope attributes: { BlTextForegroundAttribute paint: Color red } from: 0 to: 5.
-	aRope := aRope attributes: { BlTextForegroundAttribute paint: Color blue } from: 6 to: 11.
+	aRope := aRope attributes: { BlTextForegroundAttributeMock paint: Color red } from: 0 to: 5.
+	aRope := aRope attributes: { BlTextForegroundAttributeMock paint: Color blue } from: 6 to: 11.
 
 	anIterator := aRope iterator.
 	
-	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttribute ].
+	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttributeMock ].
 	self assert: aSpan == aRope left.
 	self assert: anIterator hasNext.
 	self assert: aSpan asString equals: 'Hello'.
 	
-	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttribute ].
+	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttributeMock ].
 	self assert: aSpan == aRope right left.
 	self assert: anIterator hasNext.
 	self assert: aSpan asString equals: ' '.
 	
-	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttribute ].
+	aSpan := anIterator nextSpan: [ :eachAttribute| eachAttribute isKindOf: BlTextForegroundAttributeMock ].
 	self assert: aSpan == aRope right right.
 	self assert: anIterator hasNext not.
 	self assert: aSpan asString equals: 'World'.
