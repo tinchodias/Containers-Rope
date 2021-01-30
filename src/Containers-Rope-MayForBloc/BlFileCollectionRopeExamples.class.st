@@ -1,7 +1,7 @@
 Class {
 	#name : #BlFileCollectionRopeExamples,
 	#superclass : #BlCollectionRopeExamples,
-	#category : #'Containers-Rope-Example'
+	#category : #'Containers-Rope-MayForBloc'
 }
 
 { #category : #'instance creation' }

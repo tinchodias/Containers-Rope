@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'largeFile'
 	],
-	#category : #'Containers-Rope-Example'
+	#category : #'Containers-Rope-MayForBloc'
 }
 
 { #category : #examples }
