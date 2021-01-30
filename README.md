@@ -1,7 +1,7 @@
 # Containers-Rope
 An implementation of ropes extracted from Bloc graphics system developed by feenk.com and probably Aliaksei Syrel.
 
-![https://github.com/pharo-containers/Containers-Rope/actions](https://github.com/pharo-containers/Containers-Rope/workflows/Matrix/badge.svg)
+![https://github.com/pharo-containers/Containers-Rope/actions](https://github.com/pharo-containers/Containers-Rope/workflows/Pharo9/badge.svg)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
 [![Coverage Status](https://coveralls.io/repos/github/pharo-containers/Containers-Rope/badge.svg?branch=master)](https://coveralls.io/github/pharo-containers/Containers-Rope?branch=master)
 
