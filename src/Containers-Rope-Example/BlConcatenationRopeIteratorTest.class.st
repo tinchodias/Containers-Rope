@@ -1,6 +1,12 @@
 "
 I have been automatically converted and probably manually tweaked from BlConcatenationRopeIteratorExamples. Pay attention there is an important design decision in such tests. First to let GT people execute them, the tests and helpers are tagged with <gtExample> do not remove them, let also the <label:...>.
 	Finally and more important such tests should not use setup because every method should be in capacity of returning a fully working object called an example :)
+	
+Watch the tests in this classes are chained (for no immediate benefit).	
+- this way if certain methods fail most of the tests fail for no added value. 
+- in addition in term of cost all the intermediary steps are retested for nothing (because the assertions are reexecuted while they already got executed and validated in the previous test).
+
+Strange design isn't.  
 "
 Class {
 	#name : #BlConcatenationRopeIteratorTest,
@@ -19,8 +25,42 @@ BlConcatenationRopeIteratorTest >> small [
 
 	<gtExample>
 	| aRope anIterator |
-	aRope := BlConcatenationRopeExamples new attributes_small_5_to_10.
+	aRope := BlConcatenationRopeTest new testAttributesSmall5To10.
 	anIterator := aRope iterator: 0 to: 10.
+	^ anIterator
+]
+
+{ #category : #'seed example' }
+BlConcatenationRopeIteratorTest >> smallTree [
+
+	<gtExample>
+	| aRope anIterator aCollectionRope |
+	aCollectionRope := BlCollectionRope collection: 'EarthHelloWorld'.
+
+	aRope := BlConcatenationRope
+		         left: (BlSubRope rope: aCollectionRope offset: 0 length: 5)
+		         right: (BlConcatenationRope
+				          left: (BlAttributeRope
+						           attributes: { 0 }
+						           rope:
+						           (BlSubRope rope: aCollectionRope offset: 5 length: 5))
+				          right:
+				          (BlSubRope rope: aCollectionRope offset: 10 length: 5)).
+
+
+	anIterator := aRope iterator: 0 to: 15.
+
+	self assert: anIterator position equals: 0.
+	self assert: anIterator start equals: 0.
+	self assert: anIterator end equals: 15.
+	self assert: anIterator rope == aRope.
+
+	self assert: anIterator hasNext.
+	self assert: anIterator hasPrevious not.
+
+	self assert: anIterator currentIterator rope == aCollectionRope.
+	self assert: anIterator currentIterator position equals: 0.
+
 	^ anIterator
 ]
 
@@ -29,7 +69,7 @@ BlConcatenationRopeIteratorTest >> testSmall [
 
 	<gtExample>
 	| aRope anIterator |
-	aRope := BlConcatenationRopeExamples new attributes_small_5_to_10.
+	aRope := BlConcatenationRopeTest new testAttributesSmall5To10.
 	anIterator := aRope iterator: 0 to: 10.
 
 	self assert: anIterator position equals: 0.
@@ -425,7 +465,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt1 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_0.
+	anIterator := self testSmallNextAt0.
 
 	anItem := anIterator next.
 
@@ -448,7 +488,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt10 [
 	<gtExample>
 	<label: 'Iterator throws an error when the end is reached'>
 	| anIterator anError |
-	anIterator := self small_next_at_9.
+	anIterator := self testSmallNextAt9.
 
 	anError := nil.
 	[ anIterator next ]
@@ -465,7 +505,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt2 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_1.
+	anIterator := self testSmallNextAt1.
 
 	anItem := anIterator next.
 
@@ -487,7 +527,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt3 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_2.
+	anIterator := self testSmallNextAt2.
 
 	anItem := anIterator next.
 
@@ -509,7 +549,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt4 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_3.
+	anIterator := self testSmallNextAt3.
 
 	anItem := anIterator next.
 
@@ -531,7 +571,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt5 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_4.
+	anIterator := self testSmallNextAt4.
 
 	anItem := anIterator next.
 
@@ -553,7 +593,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt6 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_5.
+	anIterator := self testSmallNextAt5.
 
 	anItem := anIterator next.
 
@@ -575,7 +615,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt7 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_6.
+	anIterator := self testSmallNextAt6.
 
 	anItem := anIterator next.
 
@@ -597,7 +637,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt8 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_7.
+	anIterator := self testSmallNextAt7.
 
 	anItem := anIterator next.
 
@@ -619,7 +659,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextAt9 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_8.
+	anIterator := self testSmallNextAt8.
 
 	anItem := anIterator next.
 
@@ -655,7 +695,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt1 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_0.
+	anIterator := self testSmallNextAt0.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan collection equals: 'ello'.
@@ -670,7 +710,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt10 [
 	<gtExample>
 	<label: 'Iterator throws an error when the end is reached'>
 	| anIterator anError |
-	anIterator := self small_next_at_9.
+	anIterator := self testSmallNextAt9.
 
 	anError := nil.
 	[ anIterator nextSpan ]
@@ -687,7 +727,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt2 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_1.
+	anIterator := self testSmallNextAt1.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan collection equals: 'llo'.
@@ -701,7 +741,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt3 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_2.
+	anIterator := self testSmallNextAt2.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan collection equals: 'lo'.
@@ -715,7 +755,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt4 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_3.
+	anIterator := self testSmallNextAt3.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan collection equals: 'o'.
@@ -729,7 +769,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt5 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_4.
+	anIterator := self testSmallNextAt4.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan attributes equals: { 1 }.
@@ -745,7 +785,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt6 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_5.
+	anIterator := self testSmallNextAt5.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan attributes equals: { 1 }.
@@ -760,7 +800,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt7 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_6.
+	anIterator := self testSmallNextAt6.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan attributes equals: { 1 }.
@@ -775,7 +815,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt8 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_7.
+	anIterator := self testSmallNextAt7.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan attributes equals: { 1 }.
@@ -790,7 +830,7 @@ BlConcatenationRopeIteratorTest >> testSmallNextSpanAt9 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_next_at_8.
+	anIterator := self testSmallNextAt8.
 	aSpan := anIterator nextSpan.
 
 	self assert: aSpan attributes equals: { 1 }.
@@ -822,7 +862,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt1 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_0.
+	anIterator := self testSmallNextAt0.
 
 	anItem := anIterator peek.
 
@@ -840,7 +880,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt10 [
 	<gtExample>
 	<label: 'Iterator throws an error when the end is reached'>
 	| anIterator anError |
-	anIterator := self small_next_at_9.
+	anIterator := self testSmallNextAt9.
 
 	anError := nil.
 	[ anIterator peek ]
@@ -857,7 +897,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt2 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_1.
+	anIterator := self testSmallNextAt1.
 
 	anItem := anIterator peek.
 
@@ -874,7 +914,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt3 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_2.
+	anIterator := self testSmallNextAt2.
 
 	anItem := anIterator peek.
 
@@ -891,7 +931,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt4 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_3.
+	anIterator := self testSmallNextAt3.
 
 	anItem := anIterator peek.
 
@@ -908,7 +948,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt5 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_4.
+	anIterator := self testSmallNextAt4.
 
 	anItem := anIterator peek.
 
@@ -925,7 +965,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt6 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_5.
+	anIterator := self testSmallNextAt5.
 
 	anItem := anIterator peek.
 
@@ -942,7 +982,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt7 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_6.
+	anIterator := self testSmallNextAt6.
 
 	anItem := anIterator peek.
 
@@ -959,7 +999,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt8 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_7.
+	anIterator := self testSmallNextAt7.
 
 	anItem := anIterator peek.
 
@@ -976,7 +1016,7 @@ BlConcatenationRopeIteratorTest >> testSmallPeekAt9 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_8.
+	anIterator := self testSmallNextAt8.
 
 	anItem := anIterator peek.
 
@@ -1011,7 +1051,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt1 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_0.
+	anIterator := self testSmallNextAt0.
 
 	anItem := anIterator previous.
 
@@ -1033,7 +1073,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt10 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_9.
+	anIterator := self testSmallNextAt9.
 
 	anItem := anIterator previous.
 
@@ -1055,7 +1095,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt2 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_1.
+	anIterator := self testSmallNextAt1.
 
 	anItem := anIterator previous.
 
@@ -1077,7 +1117,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt3 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_2.
+	anIterator := self testSmallNextAt2.
 
 	anItem := anIterator previous.
 
@@ -1099,7 +1139,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt4 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_3.
+	anIterator := self testSmallNextAt3.
 
 	anItem := anIterator previous.
 
@@ -1121,7 +1161,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt5 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_4.
+	anIterator := self testSmallNextAt4.
 
 	anItem := anIterator previous.
 
@@ -1143,7 +1183,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt6 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_5.
+	anIterator := self testSmallNextAt5.
 
 	anItem := anIterator previous.
 
@@ -1165,7 +1205,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt7 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_6.
+	anIterator := self testSmallNextAt6.
 
 	anItem := anIterator previous.
 
@@ -1187,7 +1227,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt8 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_7.
+	anIterator := self testSmallNextAt7.
 
 	anItem := anIterator previous.
 
@@ -1209,7 +1249,7 @@ BlConcatenationRopeIteratorTest >> testSmallPreviousAt9 [
 
 	<gtExample>
 	| anIterator anItem |
-	anIterator := self small_next_at_8.
+	anIterator := self testSmallNextAt8.
 
 	anItem := anIterator previous.
 
@@ -1491,7 +1531,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt0 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 0.
 
 	self assert: aSubIterator rope == anIterator rope left rope.
@@ -1507,7 +1547,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt1 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 1.
 
 	self assert: aSubIterator rope == anIterator rope left rope.
@@ -1523,7 +1563,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt10 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 10.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1539,7 +1579,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt11 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 11.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1555,7 +1595,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt12 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 12.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1571,7 +1611,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt13 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 13.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1587,7 +1627,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt14 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 14.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1603,7 +1643,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt15 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 15.
 
 	self assert: aSubIterator rope == anIterator rope right right rope.
@@ -1619,7 +1659,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt2 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 2.
 
 	self assert: aSubIterator rope == anIterator rope left rope.
@@ -1635,7 +1675,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt3 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 3.
 
 	self assert: aSubIterator rope == anIterator rope left rope.
@@ -1651,7 +1691,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt4 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 4.
 
 	self assert: aSubIterator rope == anIterator rope left rope.
@@ -1667,7 +1707,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt5 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 5.
 
 	self assert: aSubIterator rope == anIterator rope right left.
@@ -1683,7 +1723,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt6 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 6.
 
 	self assert: aSubIterator rope == anIterator rope right left.
@@ -1699,7 +1739,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt7 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 7.
 
 	self assert: aSubIterator rope == anIterator rope right left.
@@ -1715,7 +1755,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt8 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 8.
 
 	self assert: aSubIterator rope == anIterator rope right left.
@@ -1731,7 +1771,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeForwardIteratorAt9 [
 
 	<gtExample>
 	| anIterator aSubIterator |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 	aSubIterator := anIterator forwardIteratorAt: 9.
 
 	self assert: aSubIterator rope == anIterator rope right left.
@@ -1747,7 +1787,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeNextSpanAt0 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_tree.
+	anIterator := self smallTree.
 
 	aSpan := anIterator nextSpan.
 
@@ -1763,7 +1803,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeNextSpanAt10 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_tree_nextSpan_at_5.
+	anIterator := self testSmallTreeNextSpanAt5.
 
 	aSpan := anIterator nextSpan.
 
@@ -1778,7 +1818,7 @@ BlConcatenationRopeIteratorTest >> testSmallTreeNextSpanAt5 [
 
 	<gtExample>
 	| anIterator aSpan |
-	anIterator := self small_tree_nextSpan_at_0.
+	anIterator := self testSmallTreeNextSpanAt0.
 
 	aSpan := anIterator nextSpan.
 
