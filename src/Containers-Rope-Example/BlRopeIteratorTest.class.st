@@ -72,7 +72,7 @@ BlRopeIteratorTest >> testNextLine123CrabcAt4 [
 
 	<gtExample>
 	| anIterator |
-	anIterator := self next_line_123Crabc_at_0.
+	anIterator := self testNextLine123CrabcAt0.
 
 	anIterator nextLineIndicesDo: [ :aStart :anEnd :anEndDelimiter | 
 		self assert: aStart equals: 4.
@@ -107,7 +107,7 @@ BlRopeIteratorTest >> testNextLineCr123At1 [
 
 	<gtExample>
 	| anIterator |
-	anIterator := self next_line_Cr123_at_0.
+	anIterator := self testNextLineCr123At0.
 
 	anIterator nextLineIndicesDo: [ :aStart :anEnd :anEndDelimiter | 
 		self assert: aStart equals: 1.
@@ -141,7 +141,7 @@ BlRopeIteratorTest >> testNextLineCr1At1 [
 
 	<gtExample>
 	| anIterator |
-	anIterator := self next_line_Cr1_at_0.
+	anIterator := self testNextLineCr1At0.
 
 	anIterator nextLineIndicesDo: [ :aStart :anEnd :anEndDelimiter | 
 		self assert: aStart equals: 1.
@@ -193,7 +193,7 @@ BlRopeIteratorTest >> testNextLineCrCrAt1 [
 
 	<gtExample>
 	| anIterator |
-	anIterator := self next_line_CrCr_at_0.
+	anIterator := self testNextLineCrCrAt0.
 
 	anIterator nextLineIndicesDo: [ :aStart :anEnd :anEndDelimiter | 
 		self assert: aStart equals: 1.
@@ -260,7 +260,7 @@ BlRopeIteratorTest >> testNextSegment123abcAt3 [
 
 	<gtExample>
 	| anIterator aSegment |
-	anIterator := self next_segment_123abc_at_0.
+	anIterator := self testNextSegment123abcAt0.
 
 	aSegment := anIterator nextSegment: [ :aChar | aChar isDigit ].
 
@@ -276,7 +276,7 @@ BlRopeIteratorTest >> testNextSegment123abcAt6 [
 	<gtExample>
 	<label: 'Iterator throws an error when the end is reached'>
 	| anIterator anError |
-	anIterator := self next_segment_123abc_at_3.
+	anIterator := self testNextSegment123abcAt3.
 
 	anError := nil.
 	[ anIterator nextSegment: [ :aChar | aChar isDigit ] ]
