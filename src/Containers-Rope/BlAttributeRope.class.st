@@ -1,6 +1,7 @@
 "
 I am a special type of rope that can contain a set of attributes.
 I am able to add attributes to any type of rope by decorating it with attribute rope, it means that I am not a leaf rope
+
 "
 Class {
 	#name : #BlAttributeRope,
@@ -199,7 +200,7 @@ BlAttributeRope >> do: aBlock [
 	self rope do: aBlock
 ]
 
-{ #category : #'text - converting' }
+{ #category : #'rope - accessing' }
 BlAttributeRope >> empty [
 	"Create and return an empty version of this rope"
 	<return: #BlRope>
@@ -264,14 +265,6 @@ BlAttributeRope >> iterator: aStart to: anEnd [
 	^ BlAttributeRopeIterator rope: self from: aStart to: anEnd
 ]
 
-{ #category : #'text - converting' }
-BlAttributeRope >> normalized [ 
-
-	^ self class attributeRope
-		attributes: attributes
-		rope: rope normalized
-]
-
 { #category : #accessing }
 BlAttributeRope >> readStream [ 
 
@@ -289,7 +282,7 @@ BlAttributeRope >> simplified [
 
 	^ self class attributeRope
 		attributes: attributes
-		rope: rope simplified
+		rope: (rope simplified)
 ]
 
 { #category : #'rope - accessing' }

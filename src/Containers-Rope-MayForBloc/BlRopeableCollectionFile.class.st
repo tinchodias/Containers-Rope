@@ -1,4 +1,6 @@
 "
+Definition of Ropeable from wordnik.com (from Australia, New Zealand) Angry to the point of needing to be restrained from violent action.
+
 BlRopableCollectionFile looks enough like the Strings used by BlCollectionRope after the string has been normalised to be used in BlCollectionRope. 
 
 Since the entire file is not read until needed the size is an estimation which is guaranteed to be larger than or equal to the text size (since there are currently no cases in which a single byte from the file is converted to multiple characters / symbols in the resulting text).
@@ -13,9 +15,9 @@ Public API and Key Messages
 - ropeFor: 		Answer a BlRopedText on the supplied file.
 
 
-!!Internal Representation and Key Implementation Points.
+## Internal Representation and Key Implementation Points.
 
-!!!Instance Variables
+### Instance Variables
 
 	binaryStream: 		<ZnBufferedReadStream> The underlying stream for the receiver's file.
 	bufferSize: 			<Integer> See implementation notes
@@ -28,19 +30,20 @@ Public API and Key Messages
 	strict: 				<Boolean> If true, an exception will be raised when decoding the file (UTF-8).  If false, the character stream will be interpreted as ascii (null-encoding).
 
 
-!!!Implementation Points
+### Implementation Points
 
-!!!!Buffer Efficiency
+#### Buffer Efficiency
 
 Currently characters are read from the stream using #next:, creating a new buffer object each time the file is read.  Performance can be improved by re-using a single buffer and reading in to it (thus bufferedSize).
 
-!!!!size 
+#### size 
 
 The #size method currently returns an estimate of the actual size is not known.  This can cause problems if a user attempts to copy the entire contents using `text size` as the end position.
 
 Probably size should be reified and a StringSize object used to indicate the end of the string.  However it isn't clear how comparisons with numbers should be performed, and no exceptions have actually occurred, so this has been deferred until an actual case can be analysed.
 
 Once that has been done, #size should be modified to raise an exception if the actual size isn't known.  #approximateSize can be used to get an idea of the receiver's size.
+
 "
 Class {
 	#name : #BlRopeableCollectionFile,
@@ -64,12 +67,6 @@ BlRopeableCollectionFile class >> defaultBufferSize [
 	"The default number of characters in the receiver's buffer"
 
 	^ 200000
-]
-
-{ #category : #'instance creation' }
-BlRopeableCollectionFile class >> ropeFor: aFileReference [
-
-	^ BlRopedText rope: (BlCollectionRope collection: (self new fileReference: aFileReference))
 ]
 
 { #category : #comparing }
@@ -199,7 +196,7 @@ BlRopeableCollectionFile >> do: aBlock [
 { #category : #private }
 BlRopeableCollectionFile >> ensureBuffered: anInteger [
 	"Ensure the character at anInteger is buffered"
-	| mapEntry characterStream normalizer rawBuffer |
+	| mapEntry characterStream rawBuffer |
 
 	((anInteger between: bufferStart and: bufferStart + bufferedSize - 1) and: [ bufferStart > 0 ]) ifTrue: [ ^self ].
 	(haveSize and: [ anInteger > self size ]) ifTrue: [ ^self ].
@@ -210,7 +207,6 @@ BlRopeableCollectionFile >> ensureBuffered: anInteger [
 	bufferStart := mapEntry key.
 	bufferedSize := 0.
 	characterStream := self characterStream.
-	normalizer := BlTextStringNormalizer new.
 
 	"All of the below should be modified to work with existing collections,
 	not discarding and creating on each iteration"
@@ -218,7 +214,7 @@ BlRopeableCollectionFile >> ensureBuffered: anInteger [
 	[ (anInteger > (bufferStart + bufferedSize - 1)) or: [ bufferStart = 0 ] ] whileTrue:
 		[ bufferStart := bufferStart + bufferedSize.
 		rawBuffer := self loadNext: bufferSize with: characterStream.
-		buffer := normalizer process: rawBuffer.
+		buffer := rawBuffer.
 		bufferedSize := buffer size.
 		map add: (bufferStart + bufferedSize - 1) -> binaryStream position.
 		haveSize := haveSize or: [ binaryStream atEnd ].
